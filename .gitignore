@@ -16,7 +16,6 @@
 .env
 /dist
 /src/config/.env
-/src/assets/jmdict
 .env.local
 .env.development.local
 .env.test.local
