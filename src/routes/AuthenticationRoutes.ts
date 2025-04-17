@@ -22,10 +22,13 @@ router.use(cors());
 
 router.post(
     "/login",
-    (req: any, res: any, next: any) => {
-        console.log("Login request received:", req.body);
+    (req:any, res:any, next:any) => {
+        if (Buffer.isBuffer(req.body)) {
+          req.body = JSON.parse(req.body.toString()); // Manually parse Buffer
+        }
+        console.log("Request Body:", req.body); // Log the request body
         next();
-    },
+      },
     loginValidator,
     handleValidation,
     authenticationController.login

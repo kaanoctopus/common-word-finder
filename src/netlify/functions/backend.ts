@@ -1,5 +1,4 @@
 import express from "express";
-// import bodyParser from "body-parser";
 import cors from "cors";
 import serverless from "serverless-http";
 import { PrismaClient } from "@prisma/client";
@@ -10,17 +9,12 @@ import authenticationRoutes from "../../routes/AuthenticationRoutes";
 import flashcardRoutes from "../../routes/FlashcardRoutes";
 import { rateLimiter } from "../../middlewares/RateLimiter";
 
-import path from "path";
-import dotenv from "dotenv";
-dotenv.config({ path: path.resolve(__dirname, "../../config/.env") });
-
 const app = express();
 
 const prisma = new PrismaClient();
 
 app.use(cors());
 app.use(rateLimiter);
-// app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.json({ limit: "50mb" }));
 
 async function testConnection() {
