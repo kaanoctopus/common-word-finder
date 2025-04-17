@@ -1,4 +1,5 @@
 import { DictionaryAdapter } from "../utils/dictionary/DictionaryAdapter";
+import { WordFrequency, WordFrequencyWithMeanings } from "../types/dictionary";
 
 export class DictionaryService {
     private dictionaryAdapter: DictionaryAdapter;
@@ -10,15 +11,9 @@ export class DictionaryService {
     }
 
     async addMeaningsToList(
-        list: { word: string; frequency: number }[]
-    ): Promise<
-        { word: string; frequency: number; meanings: string[] | null }[]
-    > {
-        const results: {
-            word: string;
-            frequency: number;
-            meanings: string[] | null;
-        }[] = [];
+        list: WordFrequency[]
+    ): Promise<WordFrequencyWithMeanings[]> {
+        const results: WordFrequencyWithMeanings[] = [];
 
         // Process in batches to avoid memory overload and improve performance
         for (let i = 0; i < list.length; i += DictionaryService.BATCH_SIZE) {
@@ -31,10 +26,8 @@ export class DictionaryService {
     }
 
     private async processBatch(
-        batch: { word: string; frequency: number }[]
-    ): Promise<
-        { word: string; frequency: number; meanings: string[] | null }[]
-    > {
+        batch: WordFrequency[]
+    ): Promise<WordFrequencyWithMeanings[]> {
         const batchPromises = batch.map(({ word, frequency }) =>
             this.getWordMeaningsWithRetry(word, frequency)
         );
@@ -46,7 +39,7 @@ export class DictionaryService {
         word: string,
         frequency: number,
         attempt = 1
-    ): Promise<{ word: string; frequency: number; meanings: string[] | null }> {
+    ): Promise<WordFrequencyWithMeanings> {
         try {
             const meanings = await this.dictionaryAdapter.getMeanings(word);
             return { word, frequency, meanings };
