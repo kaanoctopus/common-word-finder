@@ -3,37 +3,56 @@ import path from "path";
 
 const assetsPath = path.join(__dirname, "../../assets/jmdict");
 
-const loadDictionary = () => {
+let dictionaryCache: Map<string, any> | null = null;
+
+const loadDictionary = (): Map<string, any> => {
+    if (dictionaryCache) return dictionaryCache;
+
+    const dictionaryMap = new Map<string, any>();
     const files = fs.readdirSync(assetsPath);
-    const mergedData: any[] = [];
 
-    files.forEach((file) => {
-        if (file.endsWith(".json")) {
-            const filePath = path.join(assetsPath, file);
-            const fileData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-            mergedData.push(...fileData);
+    for (const file of files) {
+        if (!file.endsWith(".json")) continue;
+
+        const filePath = path.join(assetsPath, file);
+        const fileData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+
+        for (const entry of fileData) {
+            const [word, , type] = entry;
+            if (type !== "forms") {
+                dictionaryMap.set(word, entry[5]);
+            }
         }
-    });
+    }
 
-    return mergedData;
+    dictionaryCache = dictionaryMap;
+    return dictionaryMap;
 };
 
-const dictionary = loadDictionary();
+const dictionaryMap = loadDictionary();
+
+const meaningCache = new Map<string, string[] | null>();
 
 export const getMeanings = (input: string): string[] | null => {
-    const entry = dictionary.find(
-        ([word, , type]) => word === input && type !== "forms"
-    );
+    if (meaningCache.has(input)) {
+        return meaningCache.get(input)!;
+    }
 
-    if (!entry) return null;
+    const contentEntry = dictionaryMap.get(input);
+    if (!contentEntry) {
+        meaningCache.set(input, null);
+        return null;
+    }
 
-    const contentBlocks = entry[5]?.[0]?.content;
-    if (!contentBlocks) return null;
+    const contentBlocks = contentEntry[0]?.content;
+    if (!contentBlocks) {
+        meaningCache.set(input, null);
+        return null;
+    }
 
     const blocks = Array.isArray(contentBlocks)
         ? contentBlocks
         : [contentBlocks];
-
     const definitions = blocks.flatMap((block: any) => {
         const inner = block?.content;
         const innerArray = Array.isArray(inner) ? inner : [inner];
@@ -42,5 +61,7 @@ export const getMeanings = (input: string): string[] | null => {
             .map((item: any) => item.content);
     });
 
-    return definitions.length > 0 ? definitions : null;
+    const result = definitions.length > 0 ? definitions : null;
+    meaningCache.set(input, result);
+    return result;
 };
