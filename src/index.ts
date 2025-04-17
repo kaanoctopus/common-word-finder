@@ -18,6 +18,7 @@ const app = express();
 const prisma = new PrismaClient();
 
 app.use(cors());
+app.use(express.json());
 app.use(rateLimiter);
 app.use(bodyParser.json({ limit: "50mb" }));
 

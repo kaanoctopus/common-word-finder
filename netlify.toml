@@ -11,4 +11,6 @@
     Access-Control-Allow-Headers = "Content-Type"
 
 [functions]
-    included_files=["src/assets/jmdict/*.json"]
+  directory = "src/netlify/functions"
+  node_bundler = "esbuild"
+    included_files=["*/*.json"]
