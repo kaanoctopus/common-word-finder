@@ -10,6 +10,7 @@ import {
 import cors from "cors";
 import helmet from "helmet";
 
+
 const router = express.Router();
 const authenticationService = new AuthenticationService();
 const authenticationController = new AuthenticationController(
@@ -21,14 +22,11 @@ router.use(cors());
 
 router.post(
     "/login",
-    /*loginValidator,
-    handleValidation,*/
+    loginValidator,
+    handleValidation,
     authenticationController.login
 );
-router.post(
-    "/register",
-    /*registerValidator, handleValidation,*/ authenticationController.register
-);
+router.post("/register", registerValidator, handleValidation, authenticationController.register);
 router.get("/get-user", authMiddleware, authenticationController.getUser);
 
 export default router;

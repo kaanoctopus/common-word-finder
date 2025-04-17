@@ -10,12 +10,15 @@ import authenticationRoutes from "../../routes/AuthenticationRoutes";
 import flashcardRoutes from "../../routes/FlashcardRoutes";
 import { rateLimiter } from "../../middlewares/RateLimiter";
 
+import path from "path";
+import dotenv from "dotenv";
+dotenv.config({ path: path.resolve(__dirname, "../../config/.env") });
+
 const app = express();
 
 const prisma = new PrismaClient();
 
 app.use(cors());
-app.use(express.json());
 app.use(rateLimiter);
 app.use(bodyParser.json({ limit: "50mb" }));
 

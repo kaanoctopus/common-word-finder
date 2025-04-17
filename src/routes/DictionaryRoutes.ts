@@ -14,8 +14,8 @@ router.use(cors());
 router.post(
     "/meanings",
     authMiddleware,
-    /*addMeaningsToListValidator,
-    handleValidation,*/
+    addMeaningsToListValidator,
+    handleValidation,
     dictionaryController.addMeaningsToList
 );
 
