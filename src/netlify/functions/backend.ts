@@ -8,6 +8,7 @@ import dictonaryRoutes from "../../routes/DictionaryRoutes";
 import authenticationRoutes from "../../routes/AuthenticationRoutes";
 import flashcardRoutes from "../../routes/FlashcardRoutes";
 import { rateLimiter } from "../../middlewares/RateLimiter";
+import { bufferBodyParser } from "../../middlewares/netlify";
 
 const app = express();
 
@@ -16,6 +17,7 @@ const prisma = new PrismaClient();
 app.use(cors());
 app.use(rateLimiter);
 app.use(express.json({ limit: "50mb" }));
+app.use(bufferBodyParser);
 
 async function testConnection() {
     try {
