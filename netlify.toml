@@ -10,5 +10,3 @@
     Access-Control-Allow-Methods = "GET, POST, OPTIONS"
     Access-Control-Allow-Headers = "Content-Type"
 
-[functions]
-    included_files=["src/assets/jmdict/*.json"]
