@@ -1,5 +1,5 @@
 import { DictionaryAdapter } from "../utils/dictionary/DictionaryAdapter";
-import { WordFrequency, WordFrequencyWithMeanings } from "../types/dictionary";
+import { WordFrequency, WordFrequencyWithMeanings } from "../types";
 
 export class DictionaryService {
     private dictionaryAdapter: DictionaryAdapter;

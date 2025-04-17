@@ -39,8 +39,8 @@ app.use("/api/", dictonaryRoutes);
 app.use("/api/", authenticationRoutes);
 app.use("/api/", flashcardRoutes);
 
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
-});
+// app.listen(3000, () => {
+//     console.log("Server is running on port 3000");
+// });
 
 module.exports.handler = serverless(app);
