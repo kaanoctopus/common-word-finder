@@ -3,13 +3,7 @@
     to = "/.netlify/functions/backend/:splat"
     status = 200
 
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type"
-    
+
 [functions]
   directory = "src/netlify/functions"
   node_bundler = "esbuild"
