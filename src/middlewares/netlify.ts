@@ -1,5 +1,5 @@
 export const bufferBodyParser = (req: any, res: any, next: any) => {
-    if (req.body && Buffer.isBuffer(req.body)) {
+    if (req.method !== "GET" && req.body && Buffer.isBuffer(req.body)) {
         try {
             req.body = JSON.parse(req.body.toString());
         } catch (error) {
