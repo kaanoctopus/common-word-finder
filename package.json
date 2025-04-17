@@ -15,6 +15,7 @@
         "express-validator": "^7.2.1",
         "helmet": "^8.1.0",
         "jsonwebtoken": "^9.0.2",
+        "kuromoji": "^0.1.2",
         "nlcst-parse-japanese": "^1.4.0",
         "prisma": "^6.6.0",
         "serverless-http": "^3.2.0"
