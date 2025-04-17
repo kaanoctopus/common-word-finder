@@ -8,3 +8,4 @@
   directory = "src/netlify/functions"
   node_bundler = "esbuild"
     included_files=["src/assets/jmdict/*.json"]
+    external_node_modules = ["kuromoji"]  
