@@ -18,15 +18,15 @@ router.use(cors());
 router.post(
     "/add-word",
     authMiddleware,
-    addWordFlashcardValidator,
-    handleValidation,
+   /* addWordFlashcardValidator,
+    handleValidation,*/
     flashcardController.addWordFlashcard
 );
 router.post(
     "/add-words-bulk",
     authMiddleware,
-    addWordsBulkValidator,
-    handleValidation,
+   /* addWordsBulkValidator,
+    handleValidation,*/
     flashcardController.addWordsBulkToFlashcard
 );
 router.get(
@@ -42,8 +42,8 @@ router.get(
 router.post(
     "/review",
     authMiddleware,
-    reviewFlashcardValidator,
-    handleValidation,
+    /*reviewFlashcardValidator,
+    handleValidation,*/
     flashcardController.reviewFlashcard
 );
 

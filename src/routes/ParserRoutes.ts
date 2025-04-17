@@ -11,6 +11,6 @@ const parserService = new ParserService();
 const parserController = new ParserController(parserService);
 
 router.use(cors());
-router.post("/extract-words", authMiddleware, extractWordsValidator, handleValidation, parserController.extractWordsWithFrequency);
+router.post("/extract-words", authMiddleware, /*extractWordsValidator, handleValidation,*/ parserController.extractWordsWithFrequency);
 
 export default router;
