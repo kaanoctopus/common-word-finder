@@ -26,7 +26,7 @@ const loadDictionary = (): OptimizedDictionary => {
     return JSON.parse(rawData) as OptimizedDictionary;
 };
 
-let dictionary: OptimizedDictionary |null =null //loadDictionary();
+let dictionary: OptimizedDictionary = loadDictionary();
 
 /**
  * Gets meanings for a word from the pre-processed dictionary

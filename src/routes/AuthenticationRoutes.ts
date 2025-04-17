@@ -8,6 +8,8 @@ import {
     registerValidator,
 } from "../validations/AuthenticationValidation";
 import cors from "cors";
+import helmet from "helmet";
+
 
 const router = express.Router();
 const authenticationService = new AuthenticationService();
@@ -15,7 +17,9 @@ const authenticationController = new AuthenticationController(
     authenticationService
 );
 
+router.use(helmet());
 router.use(cors());
+
 router.post(
     "/login",
     loginValidator,
