@@ -22,6 +22,10 @@ router.use(cors());
 
 router.post(
     "/login",
+    (req: any, res: any, next: any) => {
+        console.log("Login request received:", req.body);
+        next();
+    },
     loginValidator,
     handleValidation,
     authenticationController.login
