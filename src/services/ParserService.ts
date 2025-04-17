@@ -1,4 +1,5 @@
 import { JapaneseParser } from "nlcst-parse-japanese";
+import { ParsedOutput, Stack } from "../types";
 const japaneseParser = new JapaneseParser();
 
 export class ParserService {
@@ -17,31 +18,21 @@ export class ParserService {
 
     async extractWordsWithFrequency(text: string) {
         try {
-            const parsedOutput = await this.parseExpression(text);
+            const parsedOutput = (await this.parseExpression(
+                text
+            )) as ParsedOutput;
             const wordFrequency = new Map<string, number>();
-            const stack: Array<{
-                type?: string;
-                children?: Array<{
-                    value?: string;
-                    type?: string;
-                    children?: any[];
-                }>;
-            }> = [
-                parsedOutput as {
-                    type?: string;
-                    children?: Array<{
-                        value?: string;
-                        type?: string;
-                        children?: any[];
-                    }>;
-                },
-            ];
+            const stack: Stack = [parsedOutput];
 
             while (stack.length > 0) {
                 const node = stack.pop();
                 if (!node) continue;
-
-                if (node.type === "WordNode") {
+                if (
+                    node.children?.[0]?.data?.pos &&
+                    !["助詞", "助動詞", "記号", "接続詞", "連体詞"].includes(
+                        node.children[0].data.pos
+                    )
+                ) {
                     const word = node.children?.[0]?.value;
                     if (word && word !== "、") {
                         wordFrequency.set(

@@ -1,5 +1,6 @@
 import { FlashcardModel } from "../models/FlashcardModel";
-import { Cards } from "../types";
+import { UserModel } from "../models/UserModel";
+import { ReviewCards } from "../types";
 import { calculateNextReview } from "../utils/flashcardUtils";
 
 export class FlashcardService {
@@ -49,12 +50,14 @@ export class FlashcardService {
         await FlashcardModel.addCardsBulk(userId, wordsToAdd, meaningsToAdd);
     }
 
-    async getWordsFromFlashcard(userId: string): Promise<Cards[]> {
+    async getWordsFromFlashcard(userId: string): Promise<ReviewCards[]> {
         return FlashcardModel.getCardsForUser(userId);
     }
 
-    async getReviewWordsFromFlashcard(userId: string): Promise<Cards[]> {
-        return FlashcardModel.getReviewCardsForUser(userId);
+    async getReviewWordsFromFlashcard(userId: string): Promise<ReviewCards[]> {
+        const cards = await FlashcardModel.getReviewCardsForUser(userId);
+        UserModel.updateReviewCount(userId, cards.length);
+        return cards;
     }
 
     async reviewFlashcard(

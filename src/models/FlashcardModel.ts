@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { ReviewCards } from "../types";
 
 export class FlashcardModel {
     private static prisma = new PrismaClient();
@@ -33,12 +34,19 @@ export class FlashcardModel {
         return this.prisma.card.createMany({ data: cards });
     }
 
-    static async getCardsForUser(userId: string) {
-        return this.prisma.card.findMany({ where: { userId } });
+    static async getCardsForUser(userId: string): Promise<ReviewCards[]> {
+        return this.prisma.card.findMany({
+            where: { userId },
+            select: {
+                key: true,
+                state: true,
+                meanings: true,
+            },
+        });
     }
 
-    static async getReviewCardsForUser(userId: string) {
-        return this.prisma.card.findMany({
+    static async getReviewCardsForUser(userId: string): Promise<ReviewCards[]> {
+        return await this.prisma.card.findMany({
             where: {
                 userId,
                 OR: [
@@ -46,6 +54,11 @@ export class FlashcardModel {
                     { state: { not: "learned" } },
                 ],
             },
+            select: {
+                key: true,
+                state: true,
+                meanings: true,
+            }
         });
     }
 

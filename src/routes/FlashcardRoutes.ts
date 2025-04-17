@@ -37,7 +37,7 @@ router.get(
 router.get(
     "/get-review-words",
     authMiddleware,
-    flashcardController.getWordsFromFlashcard
+    flashcardController.getReviewWordsFromFlashcard
 );
 router.post(
     "/review",

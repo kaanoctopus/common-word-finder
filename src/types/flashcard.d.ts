@@ -6,3 +6,9 @@ export type Cards = {
     interval: number;
     userId: string;
 }
+
+export type ReviewCards = {
+    key: string;
+    meanings: string[];
+    state: string;
+}

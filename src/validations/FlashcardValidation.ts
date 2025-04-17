@@ -8,7 +8,6 @@ export const addWordFlashcardValidator = [
 export const addWordsBulkValidator = [
     body("words").isArray().withMessage("Words are required"),
     body("meanings").isArray().withMessage("Meanings are required"),
-    body("meanings.*").isString().withMessage("Each meaning must be a string"),
 ];
 
 export const reviewFlashcardValidator = [

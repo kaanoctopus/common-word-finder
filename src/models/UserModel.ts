@@ -19,4 +19,20 @@ export class UserModel {
     static async findById(id: string): Promise<User | null> {
         return this.prisma.user.findUnique({ where: { id } });
     }
+
+    static async updateReviewCount(
+        id: string,
+        reviewCount: number
+    ): Promise<User> {
+        return this.prisma.user.update({
+            where: { id },
+            data: { reviewCount },
+        });
+        // return;
+    }
+
+    static async getReviewCountById(id: string): Promise<Number> {
+        const user = await this.prisma.user.findUnique({ where: { id } });
+        return user?.reviewCount || 0;
+    }
 }
