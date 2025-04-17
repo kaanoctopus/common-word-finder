@@ -37,6 +37,18 @@ export class FlashcardModel {
         return this.prisma.card.findMany({ where: { userId } });
     }
 
+    static async getReviewCardsForUser(userId: string) {
+        return this.prisma.card.findMany({
+            where: {
+                userId,
+                OR: [
+                    { nextReview: { lt: new Date() } },
+                    { state: { not: "learned" } },
+                ],
+            },
+        });
+    }
+
     static async findCardByUserAndKey(userId: string, key: string) {
         return this.prisma.card.findFirst({ where: { userId, key } });
     }

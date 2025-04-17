@@ -53,6 +53,10 @@ export class FlashcardService {
         return FlashcardModel.getCardsForUser(userId);
     }
 
+    async getReviewWordsFromFlashcard(userId: string): Promise<Cards[]> {
+        return FlashcardModel.getReviewCardsForUser(userId);
+    }
+
     async reviewFlashcard(
         userId: string,
         word: string,

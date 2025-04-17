@@ -48,6 +48,19 @@ export class FlashcardController {
         }
     };
 
+    getReviewWordsFromFlashcard = async (req: Request, res: Response) => {
+        const userId = req.userId;
+
+        try {
+            const result = await this.flashcardService.getReviewWordsFromFlashcard(
+                userId
+            );
+            res.json(result);
+        } catch (err) {
+            res.status(400).json({ error: (err as Error).message });
+        }
+    };
+
     reviewFlashcard = async (req: Request, res: Response) => {
         const { word, answer } = req.body;
         const userId = req.userId;
