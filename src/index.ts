@@ -5,7 +5,6 @@ dotenv.config({ path: path.resolve(__dirname, "./config/.env") });
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import serverless from "serverless-http";
 import { PrismaClient } from "@prisma/client";
 
 import parserRoutes from "./routes/ParserRoutes";
@@ -39,8 +38,8 @@ app.use("/api/", dictonaryRoutes);
 app.use("/api/", authenticationRoutes);
 app.use("/api/", flashcardRoutes);
 
-// app.listen(3000, () => {
-//     console.log("Server is running on port 3000");
-// });
+app.listen(3000, () => {
+    console.log("Server is running on port 3000");
+});
 
-module.exports.handler = serverless(app);
+export default app;
