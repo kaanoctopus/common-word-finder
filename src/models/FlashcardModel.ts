@@ -86,13 +86,13 @@ export class FlashcardModel {
         answer: boolean
     ) {
         const card = await this.prisma.card.findUnique({ where: { id } });
-
+    
         if (!card) {
             throw new Error("Card not found");
         }
-
+    
         const updatedData: Record<string, any> = {};
-
+    
         switch (card.state) {
             case "learned":
                 if (!answer) {
@@ -101,24 +101,40 @@ export class FlashcardModel {
                 updatedData.interval = interval;
                 updatedData.nextReview = nextReview;
                 break;
-
+    
             case "relearning1":
                 if (answer) {
                     updatedData.state = "relearning2";
                 } else {
-                    return;
+                    updatedData.state = "relearning1"; // Explicit fallback
                 }
                 break;
-
+    
             case "relearning2":
                 updatedData.state = answer ? "learned" : "relearning1";
+                break;
+    
+            default:
+                console.warn(`Unhandled state: ${card.state}`);
+                return;
         }
-
-
-        await this.prisma.card.update({
-            where: { id },
-            data: updatedData,
-        });
-
+    
+        if (Object.keys(updatedData).length === 0) {
+            console.warn(`No updates to apply for card ${id}.`);
+            return;
+        }
+    
+        console.log(`Updating card ${id} from state ${card.state} with`, updatedData);
+    
+        try {
+            await this.prisma.card.update({
+                where: { id },
+                data: updatedData,
+            });
+        } catch (error) {
+            console.error(`Failed to update card ${id}:`, error);
+            throw error;
+        }
     }
+    
 }
