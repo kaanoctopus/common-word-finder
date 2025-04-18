@@ -114,9 +114,11 @@ export class FlashcardModel {
                 updatedData.state = answer ? "learned" : "relearning1";
         }
 
-        this.prisma.card.update({
+
+        await this.prisma.card.update({
             where: { id },
             data: updatedData,
         });
+
     }
 }

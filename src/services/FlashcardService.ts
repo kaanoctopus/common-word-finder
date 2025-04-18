@@ -67,10 +67,13 @@ export class FlashcardService {
         const card = await FlashcardModel.findCardByUserAndKey(userId, word);
         if (!card) throw new Error("Card not found");
 
+
         const { interval, nextReview } = calculateNextReview(
             card.interval,
             answer
         );
+
+
         FlashcardModel.updateCard(card.id, interval, nextReview, answer);
     }
 }
