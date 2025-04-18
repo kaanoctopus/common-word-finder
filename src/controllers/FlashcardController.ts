@@ -76,4 +76,19 @@ export class FlashcardController {
             res.status(400).json({ error: (err as Error).message });
         }
     };
+
+    updateReviewCount = async (req: Request, res: Response) => {
+        const { count } = req.body;
+        const userId = req.userId;
+
+        try {
+            const result = await this.flashcardService.updateReviewCount(
+                userId,
+                count
+            );
+            res.json(result);
+        } catch (err) {
+            res.status(400).json({ error: (err as Error).message });
+        }
+    }
 }

@@ -7,6 +7,7 @@ import {
     addWordFlashcardValidator,
     addWordsBulkValidator,
     reviewFlashcardValidator,
+    updateReviewCountValidator,
 } from "../validations/FlashcardValidation";
 import cors from "cors";
 
@@ -45,6 +46,13 @@ router.post(
     reviewFlashcardValidator,
     handleValidation,
     flashcardController.reviewFlashcard
+);
+router.post(
+    "/update-review-count",
+    authMiddleware,
+    updateReviewCountValidator,
+    handleValidation,
+    flashcardController.updateReviewCount
 );
 
 export default router;

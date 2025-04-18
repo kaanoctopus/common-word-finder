@@ -14,3 +14,7 @@ export const reviewFlashcardValidator = [
     body("word").isString().withMessage("Word is required"),
     body("answer").isBoolean().withMessage("Answer is required"),
 ];
+
+export const updateReviewCountValidator = [
+    body("count").isNumeric().withMessage("Word is required"),
+];

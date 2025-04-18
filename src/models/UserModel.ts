@@ -28,7 +28,6 @@ export class UserModel {
             where: { id },
             data: { reviewCount },
         });
-        // return;
     }
 
     static async getReviewCountById(id: string): Promise<Number> {

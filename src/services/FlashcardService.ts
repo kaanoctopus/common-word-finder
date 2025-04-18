@@ -60,6 +60,10 @@ export class FlashcardService {
         return cards;
     }
 
+    async updateReviewCount(userId: string, count: number): Promise<void> {
+        await UserModel.updateReviewCount(userId, count);
+    }
+
     async reviewFlashcard(
         userId: string,
         word: string,
