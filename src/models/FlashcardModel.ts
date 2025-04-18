@@ -58,7 +58,7 @@ export class FlashcardModel {
                 key: true,
                 state: true,
                 meanings: true,
-            }
+            },
         });
     }
 
@@ -92,6 +92,8 @@ export class FlashcardModel {
             case "relearning1":
                 if (answer) {
                     updatedData.state = "relearning2";
+                } else {
+                    return;
                 }
                 break;
 
@@ -99,7 +101,7 @@ export class FlashcardModel {
                 updatedData.state = answer ? "learned" : "relearning1";
         }
 
-        return this.prisma.card.update({
+        this.prisma.card.update({
             where: { id },
             data: updatedData,
         });

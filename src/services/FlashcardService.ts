@@ -33,19 +33,19 @@ export class FlashcardService {
                 .filter((word): word is string => word !== null)
         );
 
-        const newWords: { word: string; meanings: string[] }[] = [];
+        const wordsToAdd: string[] = [];
+        const meaningsToAdd: string[][] = [];
+
         for (let i = 0; i < words.length; i++) {
             if (!existingWordSet.has(words[i])) {
-                newWords.push({ word: words[i], meanings: meanings[i] });
+                wordsToAdd.push(words[i]);
+                meaningsToAdd.push(meanings[i]);
             }
         }
 
-        if (newWords.length === 0) {
+        if (wordsToAdd.length === 0) {
             throw new Error("All cards already exist");
         }
-
-        const wordsToAdd = newWords.map((w) => w.word);
-        const meaningsToAdd = newWords.map((w) => w.meanings);
 
         await FlashcardModel.addCardsBulk(userId, wordsToAdd, meaningsToAdd);
     }
@@ -76,6 +76,6 @@ export class FlashcardService {
             card.interval,
             answer
         );
-        await FlashcardModel.updateCard(card.id, interval, nextReview, answer);
+        FlashcardModel.updateCard(card.id, interval, nextReview, answer);
     }
 }

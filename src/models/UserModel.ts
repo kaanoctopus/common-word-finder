@@ -30,8 +30,11 @@ export class UserModel {
         });
     }
 
-    static async getReviewCountById(id: string): Promise<Number> {
-        const user = await this.prisma.user.findUnique({ where: { id } });
-        return user?.reviewCount || 0;
+    static async getReviewCountById(id: string): Promise<number> {
+        const count = await this.prisma.user.findUnique({
+            where: { id },
+            select: { reviewCount: true },
+        });
+        return count?.reviewCount || 0;
     }
 }
