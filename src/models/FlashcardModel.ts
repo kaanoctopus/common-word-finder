@@ -70,71 +70,91 @@ export class FlashcardModel {
         return this.prisma.card.findMany({
             where: {
                 userId,
-                key: { in: keys }
+                key: { in: keys },
             },
             select: {
-                key: true
-            }
+                key: true,
+            },
         });
     }
-
 
     static async updateCard(
         id: string,
         interval: number,
         nextReview: Date,
-        answer: boolean
+        answer: boolean,
+        maxRetries = 3
     ) {
-        const card = await this.prisma.card.findUnique({ where: { id } });
-    
-        if (!card) {
-            throw new Error("Card not found");
-        }
-    
-        const updatedData: Record<string, any> = {};
-    
-        switch (card.state) {
-            case "learned":
-                if (!answer) {
-                    updatedData.state = "relearning1";
-                }
-                updatedData.interval = interval;
-                updatedData.nextReview = nextReview;
-                break;
-    
-            case "relearning1":
-                if (answer) {
-                    updatedData.state = "relearning2";
-                } else {
-                    updatedData.state = "relearning1"; // Explicit fallback
-                }
-                break;
-    
-            case "relearning2":
-                updatedData.state = answer ? "learned" : "relearning1";
-                break;
-    
-            default:
-                console.warn(`Unhandled state: ${card.state}`);
+        let retries = 0;
+
+        while (retries < maxRetries) {
+            const card = await this.prisma.card.findUnique({ where: { id } });
+
+            if (!card) {
+                throw new Error("Card not found");
+            }
+
+            const updatedData: Record<string, any> = {};
+            let shouldUpdate = false;
+
+            switch (card.state) {
+                case "learned":
+                    if (!answer) {
+                        updatedData.state = "relearning1";
+                    }
+                    updatedData.interval = interval;
+                    updatedData.nextReview = nextReview;
+                    shouldUpdate = true;
+                    break;
+
+                case "relearning1":
+                    updatedData.state = answer ? "relearning2" : "relearning1";
+                    shouldUpdate = true;
+                    break;
+
+                case "relearning2":
+                    updatedData.state = answer ? "learned" : "relearning1";
+                    shouldUpdate = true;
+                    break;
+
+                default:
+                    console.warn(`Unhandled state: ${card.state}`);
+                    return;
+            }
+
+            if (!shouldUpdate) {
+                console.warn(`No updates to apply for card ${id}.`);
                 return;
+            }
+
+            try {
+                const result = await this.prisma.card.updateMany({
+                    where: {
+                        id: card.id,
+                        updatedAt: card.updatedAt,
+                    },
+                    data: updatedData,
+                });
+
+                if (result.count === 0) {
+                    // Another update happened — retry with latest data
+                    console.warn(
+                        `Conflict on update attempt ${retries + 1} — retrying`
+                    );
+                    retries++;
+                    continue;
+                }
+
+                console.log(`Card ${id} successfully updated`);
+                return;
+            } catch (error) {
+                console.error(`Failed to update card ${id}:`, error);
+                throw error;
+            }
         }
-    
-        if (Object.keys(updatedData).length === 0) {
-            console.warn(`No updates to apply for card ${id}.`);
-            return;
-        }
-    
-        console.log(`Updating card ${id} from state ${card.state} with`, updatedData);
-    
-        try {
-            await this.prisma.card.update({
-                where: { id },
-                data: updatedData,
-            });
-        } catch (error) {
-            console.error(`Failed to update card ${id}:`, error);
-            throw error;
-        }
+
+        throw new Error(
+            `Failed to update card ${id} after ${maxRetries} retries`
+        );
     }
-    
 }
