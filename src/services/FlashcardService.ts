@@ -16,22 +16,17 @@ export class FlashcardService {
         if (existing) throw new Error("Card already exists");
         await FlashcardModel.addCard(userId, word, meanings);
     }
+
     async addWordsBulkToFlashcard(
         userId: string,
         words: string[],
         meanings: string[][]
     ): Promise<void> {
-        const existingWordSet = new Set(
-            (
-                await Promise.all(
-                    words.map((word) =>
-                        FlashcardModel.findCardByUserAndKey(userId, word)
-                    )
-                )
-            )
-                .map((card, i) => (card ? words[i] : null))
-                .filter((word): word is string => word !== null)
+        const existingCards = await FlashcardModel.findCardsByUserAndKeys(
+            userId,
+            words
         );
+        const existingWordSet = new Set(existingCards.map((card) => card.key));
 
         const wordsToAdd: string[] = [];
         const meaningsToAdd: string[][] = [];
