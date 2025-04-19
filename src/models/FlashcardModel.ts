@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 import { ReviewCards } from "../types";
 
 export class FlashcardModel {
@@ -70,14 +70,13 @@ export class FlashcardModel {
         return this.prisma.card.findMany({
             where: {
                 userId,
-                key: { in: keys }
+                key: { in: keys },
             },
             select: {
-                key: true
-            }
+                key: true,
+            },
         });
     }
-
 
     static async updateCard(
         id: string,
@@ -91,7 +90,7 @@ export class FlashcardModel {
             throw new Error("Card not found");
         }
 
-        const updatedData: Record<string, any> = {};
+        const updatedData: Prisma.CardUpdateInput = {};
 
         switch (card.state) {
             case "learned":
@@ -114,11 +113,9 @@ export class FlashcardModel {
                 updatedData.state = answer ? "learned" : "relearning1";
         }
 
-
         await this.prisma.card.update({
             where: { id },
             data: updatedData,
         });
-
     }
 }

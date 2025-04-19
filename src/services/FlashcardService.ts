@@ -1,9 +1,13 @@
 import { FlashcardModel } from "../models/FlashcardModel";
 import { UserModel } from "../models/UserModel";
-import { ReviewCards } from "../types";
-import { calculateNextReview } from "../utils/flashcardUtils";
+import { ReviewCards, FlashcardServiceBase } from "../types";
+import {
+    calculateNextReview,
+    filterNewWords,
+    queuePromise,
+} from "../utils/FlashcardUtils";
 
-export class FlashcardService {
+export class FlashcardService implements FlashcardServiceBase {
     private static queue: Map<string, Promise<void>> = new Map();
     async addWordFlashcard(
         userId: string,
@@ -29,15 +33,11 @@ export class FlashcardService {
         );
         const existingWordSet = new Set(existingCards.map((card) => card.key));
 
-        const wordsToAdd: string[] = [];
-        const meaningsToAdd: string[][] = [];
-
-        for (let i = 0; i < words.length; i++) {
-            if (!existingWordSet.has(words[i])) {
-                wordsToAdd.push(words[i]);
-                meaningsToAdd.push(meanings[i]);
-            }
-        }
+        const { wordsToAdd, meaningsToAdd } = filterNewWords(
+            words,
+            meanings,
+            existingWordSet
+        );
 
         if (wordsToAdd.length === 0) {
             throw new Error("All cards already exist");
@@ -60,27 +60,6 @@ export class FlashcardService {
         await UserModel.updateReviewCount(userId, count);
     }
 
-    async queueFlashcard(
-        cardId: string,
-        fn: () => Promise<void>
-    ): Promise<void> {
-        const existingPromise =
-            FlashcardService.queue.get(cardId) ?? Promise.resolve();
-        const newPromise = existingPromise
-            .then(fn)
-            .catch((err) =>
-                console.error(`Error in flashcard queue for ${cardId}`, err)
-            )
-            .finally(() => {
-                if (FlashcardService.queue.get(cardId) === newPromise) {
-                    FlashcardService.queue.delete(cardId);
-                }
-            });
-
-        FlashcardService.queue.set(cardId, newPromise);
-        return newPromise;
-    }
-
     async reviewFlashcard(
         userId: string,
         word: string,
@@ -94,9 +73,8 @@ export class FlashcardService {
             answer
         );
 
-        await this.queueFlashcard(card.id, () =>
+        await queuePromise(FlashcardService.queue, card.id, () =>
             FlashcardModel.updateCard(card.id, interval, nextReview, answer)
         );
-        // FlashcardModel.updateCard(card.id, interval, nextReview, answer);
     }
 }

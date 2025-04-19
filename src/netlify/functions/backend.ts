@@ -9,7 +9,6 @@ import authenticationRoutes from "../../routes/AuthenticationRoutes";
 import flashcardRoutes from "../../routes/FlashcardRoutes";
 import { rateLimiter } from "../../middlewares/RateLimiter";
 import { bufferBodyParser } from "../../middlewares/netlify";
-import kuromoji from "kuromoji";
 
 const app = express();
 

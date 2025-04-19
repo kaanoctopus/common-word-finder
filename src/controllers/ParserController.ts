@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
+import { ParserServiceBase } from "../types";
 
 export class ParserController {
-    constructor(private parserService: any) {}
+    constructor(private parserService: ParserServiceBase) {}
 
     extractWordsWithFrequency = async (req: Request, res: Response) => {
         const { text } = req.body;

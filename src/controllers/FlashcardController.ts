@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
+import { FlashcardServiceBase } from "../types";
 
 export class FlashcardController {
-    constructor(private flashcardService: any) {}
+    constructor(private flashcardService: FlashcardServiceBase) {}
 
     addWordFlashcard = async (req: Request, res: Response) => {
         const { word, meanings } = req.body;
-        const userId = req.userId;
+        const userId = req.userId as string;
 
         try {
             const result = await this.flashcardService.addWordFlashcard(
@@ -21,7 +22,7 @@ export class FlashcardController {
 
     addWordsBulkToFlashcard = async (req: Request, res: Response) => {
         const { words, meanings } = req.body;
-        const userId = req.userId;
+        const userId = req.userId as string;
 
         try {
             const result = await this.flashcardService.addWordsBulkToFlashcard(
@@ -36,7 +37,7 @@ export class FlashcardController {
     };
 
     getWordsFromFlashcard = async (req: Request, res: Response) => {
-        const userId = req.userId;
+        const userId = req.userId as string;
 
         try {
             const result = await this.flashcardService.getWordsFromFlashcard(
@@ -49,7 +50,7 @@ export class FlashcardController {
     };
 
     getReviewWordsFromFlashcard = async (req: Request, res: Response) => {
-        const userId = req.userId;
+        const userId = req.userId as string;
 
         try {
             const result = await this.flashcardService.getReviewWordsFromFlashcard(
@@ -63,7 +64,7 @@ export class FlashcardController {
 
     reviewFlashcard = async (req: Request, res: Response) => {
         const { word, answer } = req.body;
-        const userId = req.userId;
+        const userId = req.userId as string;
 
         try {
             const result = await this.flashcardService.reviewFlashcard(
@@ -79,7 +80,7 @@ export class FlashcardController {
 
     updateReviewCount = async (req: Request, res: Response) => {
         const { count } = req.body;
-        const userId = req.userId;
+        const userId = req.userId as string;
 
         try {
             const result = await this.flashcardService.updateReviewCount(

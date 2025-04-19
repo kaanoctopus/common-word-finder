@@ -1,10 +1,11 @@
 import axios from "axios";
 
 const jishoLink = "https://jisho.org/api/v1/search/words?keyword=";
+import { jishoEntry, jishoSense } from "../../types";
 
 export const getMeanings = async (word: string): Promise<string[]> => {
     try {
-        const response = await axios.get(`${jishoLink}${word}`, {
+        const response = await axios.get(`${jishoLink}${encodeURIComponent(word)}`, {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
             }
@@ -15,9 +16,9 @@ export const getMeanings = async (word: string): Promise<string[]> => {
         }
 
         const definitions: string[] = [];
-        response.data.data.forEach((entry: any) => {
+        response.data.data.forEach((entry: jishoEntry) => {
             if (entry.senses) {
-                entry.senses.forEach((sense: any) => {
+                entry.senses.forEach((sense: jishoSense) => {
                     if (sense.english_definitions) {
                         definitions.push(...sense.english_definitions);
                     }

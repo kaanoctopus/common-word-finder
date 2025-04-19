@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
+import { DictionaryServiceBase } from "../types";
 
 export class DictionaryController {
-    constructor(private dictionaryService: any) {}
+    constructor(private dictionaryService: DictionaryServiceBase) {}
 
     addMeaningsToList = async (req: Request, res: Response) => {
         const { list } = req.body;

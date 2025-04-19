@@ -1,13 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { getToken, verifyJWT } from "../utils/authUtils";
+import { getToken, verifyJWT } from "../utils/AuthUtils";
 import { handleValidation } from "./HandleValidation";
 
-declare global {
-    namespace Express {
-        interface Request {
-            userId?: string;
-        }
+declare module "express" {
+    interface Request {
+        userId?: string;
     }
 }
 

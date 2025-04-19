@@ -3,7 +3,6 @@ export type Stack = Array<{
     children?: Array<{
         value?: string;
         type?: string;
-        children?: any[];
         data?: {
             pos?: string;
         };
@@ -15,6 +14,10 @@ export type ParsedOutput = {
     children?: Array<{
         value?: string;
         type?: string;
-        children?: any[];
     }>;
 };
+
+export type wordWithFreq = {
+    word: string;
+    frequency: number;
+}

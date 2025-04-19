@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
+import {AuthenticationServiceBase} from "../types"
 
 export class AuthenticationController {
-    constructor(private authenticationService: any) {}
+    constructor(private authenticationService: AuthenticationServiceBase) {}
 
     login = async (req: Request, res: Response) => {
         const { email, password } = req.body;
@@ -34,7 +35,7 @@ export class AuthenticationController {
 
     getUser = async (req: Request, res: Response) => {
         try {
-            const result = await this.authenticationService.getUser(req.userId);
+            const result = await this.authenticationService.getUser(req.userId as string);
             res.json(result);
         } catch (err) {
             res.status(400).json({ error: (err as Error).message });

@@ -1,13 +1,13 @@
 import { UserModel } from "../models/UserModel";
-import { User, RegisterResponse, LoginResponse } from "../types/auth";
+import { User, RegisterResponse, LoginResponse, AuthenticationServiceBase } from "../types";
 import {
     hashPassword,
     comparePasswords,
     generateJWT,
-    verifyJWT,
-} from "../utils/authUtils";
+} from "../utils/AuthUtils";
 
-export class AuthenticationService {
+ 
+export class AuthenticationService implements AuthenticationServiceBase {
     async register(
         username: string,
         password: string,

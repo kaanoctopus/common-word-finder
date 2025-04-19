@@ -1,0 +1,1 @@
+export const EXCLUDED_POS = new Set(["助詞", "助動詞", "記号", "接続詞", "連体詞"]);
