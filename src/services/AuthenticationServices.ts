@@ -9,7 +9,7 @@ import {
     hashPassword,
     comparePasswords,
     generateJWT,
-} from "../utils/authUtils";
+} from "../utils/AuthUtils";
 
 export class AuthenticationService implements AuthenticationServiceBase {
     async register(

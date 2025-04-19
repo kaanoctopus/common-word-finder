@@ -1,6 +1,6 @@
 import {
     processWordListInBatches
-} from "../utils/dictionary/dictionaryUtils";
+} from "../utils/dictionary/DictionaryUtils";
 import {
     WordFrequency,
     WordFrequencyWithMeanings,

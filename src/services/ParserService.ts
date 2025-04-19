@@ -1,5 +1,5 @@
 import { Stack, wordWithFreq, ParserServiceBase } from "../types";
-import { parseJapaneseText, isValidWord } from "../utils/parserUtils";
+import { parseJapaneseText, isValidWord } from "../utils/ParserUtils";
 import {AxiosError} from "axios";
 
 export class ParserService implements ParserServiceBase {

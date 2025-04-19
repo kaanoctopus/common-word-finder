@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { getToken, verifyJWT } from "../utils/authUtils";
+import { getToken, verifyJWT } from "../utils/AuthUtils";
 import { handleValidation } from "./HandleValidation";
 
 declare module "express" {

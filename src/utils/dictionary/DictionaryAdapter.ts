@@ -1,5 +1,5 @@
 import { getMeanings as getJishoMeanings } from "./jisho";
-import { getMeanings as getLocalMeanings } from "./localDictionary";
+import { getMeanings as getLocalMeanings } from "./LocalDictionary";
 
 export class DictionaryAdapter {
     private useLocalFallback: boolean;
