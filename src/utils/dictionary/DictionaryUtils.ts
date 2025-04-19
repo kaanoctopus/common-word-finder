@@ -1,4 +1,4 @@
-import { DictionaryAdapter } from "./DictionaryAdapter";
+import { DictionaryAdapter } from "./dictionaryAdapter";
 import { WordFrequency, WordFrequencyWithMeanings } from "../../types";
 
 const BATCH_SIZE = 50;

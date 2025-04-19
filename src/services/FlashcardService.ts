@@ -5,7 +5,7 @@ import {
     calculateNextReview,
     filterNewWords,
     queuePromise,
-} from "../utils/FlashcardUtils";
+} from "../utils/flashcardUtils";
 
 export class FlashcardService implements FlashcardServiceBase {
     private static queue: Map<string, Promise<void>> = new Map();
