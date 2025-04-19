@@ -4,6 +4,7 @@ import { ReviewCards } from "../types";
 import { calculateNextReview } from "../utils/flashcardUtils";
 
 export class FlashcardService {
+    private static queue: Map<string, Promise<void>> = new Map();
     async addWordFlashcard(
         userId: string,
         word: string,
@@ -59,6 +60,27 @@ export class FlashcardService {
         await UserModel.updateReviewCount(userId, count);
     }
 
+    async queueFlashcard(
+        cardId: string,
+        fn: () => Promise<void>
+    ): Promise<void> {
+        const existingPromise =
+            FlashcardService.queue.get(cardId) ?? Promise.resolve();
+        const newPromise = existingPromise
+            .then(fn)
+            .catch((err) =>
+                console.error(`Error in flashcard queue for ${cardId}`, err)
+            )
+            .finally(() => {
+                if (FlashcardService.queue.get(cardId) === newPromise) {
+                    FlashcardService.queue.delete(cardId);
+                }
+            });
+
+        FlashcardService.queue.set(cardId, newPromise);
+        return newPromise;
+    }
+
     async reviewFlashcard(
         userId: string,
         word: string,
@@ -67,13 +89,14 @@ export class FlashcardService {
         const card = await FlashcardModel.findCardByUserAndKey(userId, word);
         if (!card) throw new Error("Card not found");
 
-
         const { interval, nextReview } = calculateNextReview(
             card.interval,
             answer
         );
 
-
-        FlashcardModel.updateCard(card.id, interval, nextReview, answer);
+        await this.queueFlashcard(card.id, () =>
+            FlashcardModel.updateCard(card.id, interval, nextReview, answer)
+        );
+        // FlashcardModel.updateCard(card.id, interval, nextReview, answer);
     }
 }
