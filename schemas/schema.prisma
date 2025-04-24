@@ -20,7 +20,7 @@ model Card {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   key        String
   meanings   String[]
-  reading    String
+  reading    String?
   nextReview DateTime
   interval   Int
   state      String   @default("learned")
