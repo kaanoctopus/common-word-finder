@@ -5,14 +5,15 @@ export class FlashcardController {
     constructor(private flashcardService: FlashcardServiceBase) {}
 
     addWordFlashcard = async (req: Request, res: Response) => {
-        const { word, meanings } = req.body;
+        const { word, meanings, reading } = req.body;
         const userId = req.userId as string;
 
         try {
             const result = await this.flashcardService.addWordFlashcard(
                 userId,
                 word,
-                meanings
+                meanings,
+                reading
             );
             res.json(result);
         } catch (err) {
@@ -21,14 +22,31 @@ export class FlashcardController {
     };
 
     addWordsBulkToFlashcard = async (req: Request, res: Response) => {
-        const { words, meanings } = req.body;
+        const { words, meanings, readings } = req.body;
         const userId = req.userId as string;
 
         try {
             const result = await this.flashcardService.addWordsBulkToFlashcard(
                 userId,
                 words,
-                meanings
+                meanings,
+                readings
+            );
+            res.json(result);
+        } catch (err) {
+            res.status(400).json({ error: (err as Error).message });
+        }
+    };
+
+    isExists = async (req: Request, res: Response) => {
+        const { word } = req.body;
+
+        const userId = req.userId as string;
+
+        try {
+            const result = await this.flashcardService.isExists(
+                userId,
+                word,
             );
             res.json(result);
         } catch (err) {

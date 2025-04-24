@@ -3,14 +3,14 @@ import {
 } from "../utils/dictionary/DictionaryUtils";
 import {
     WordFrequency,
-    WordFrequencyWithMeanings,
+    WordFrequencyWithEntry,
     DictionaryServiceBase
 } from "../types";
 
 export class DictionaryService implements DictionaryServiceBase {
-    async addMeaningsToList(
+    async addEntriesToList(
         list: WordFrequency[]
-    ): Promise<WordFrequencyWithMeanings[]> {
+    ): Promise<WordFrequencyWithEntry[]> {
         return processWordListInBatches(list);
     }
 }

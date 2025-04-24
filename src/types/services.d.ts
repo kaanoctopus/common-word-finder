@@ -3,9 +3,9 @@ import {
     LoginResponse,
     User,
     WordFrequency,
-    WordFrequencyWithMeanings,
+    WordFrequencyWithEntry,
     ReviewCards,
-    wordWithFreq
+    wordWithFreq,
 } from "../types";
 
 export abstract class AuthenticationServiceBase {
@@ -19,22 +19,25 @@ export abstract class AuthenticationServiceBase {
 }
 
 export abstract class DictionaryServiceBase {
-    abstract addMeaningsToList(
+    abstract addEntriesToList(
         list: WordFrequency[]
-    ): Promise<WordFrequencyWithMeanings[]>;
+    ): Promise<WordFrequencyWithEntry[]>;
 }
 
 export abstract class FlashcardServiceBase {
     abstract addWordFlashcard(
         userId: string,
         word: string,
-        meanings: string[]
+        meanings: string[],
+        reading: string
     ): Promise<void>;
     abstract addWordsBulkToFlashcard(
         userId: string,
         words: string[],
-        meanings: string[][]
+        meanings: string[][],
+        readings: string[]
     ): Promise<void>;
+    abstract isExists(userId: string, word: string): Promise<boolean>;
     abstract getWordsFromFlashcard(userId: string): Promise<ReviewCards[]>;
     abstract getReviewWordsFromFlashcard(
         userId: string
@@ -48,5 +51,5 @@ export abstract class FlashcardServiceBase {
 }
 
 export abstract class ParserServiceBase {
-    abstract extractWordsWithFrequency(text: string): Promise<wordWithFreq[]>
+    abstract extractWordsWithFrequency(text: string): Promise<wordWithFreq[]>;
 }

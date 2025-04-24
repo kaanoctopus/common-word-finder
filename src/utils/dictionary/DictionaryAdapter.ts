@@ -1,5 +1,5 @@
-import { getMeanings as getJishoMeanings } from "./jisho";
-import { getMeanings as getLocalMeanings } from "./LocalDictionary";
+// import { getEntry as getJishoMeanings } from "./jisho";
+import { getEntry as getLocalMeanings } from "./LocalDictionary";
 
 export class DictionaryAdapter {
     private useLocalFallback: boolean;
@@ -8,18 +8,18 @@ export class DictionaryAdapter {
         this.useLocalFallback = true;
     }
 
-    async getMeanings(word: string): Promise<string[] | null> {
+    async getEntry(word: string) {
         if (this.useLocalFallback) {
             return getLocalMeanings(word);
         }
 
-        try {
-            const meanings = await getJishoMeanings(word);
-            return meanings;
-        } catch (error) {
-            console.error("Switching to local dictionary due to error:", error);
+        // try {
+        //     const meanings = await getJishoMeanings(word);
+        //     return meanings;
+        // } catch (error) {
+            // console.error("Switching to local dictionary due to error:", error);
             this.useLocalFallback = true;
             return getLocalMeanings(word);
-        }
+        // }
     }
 }

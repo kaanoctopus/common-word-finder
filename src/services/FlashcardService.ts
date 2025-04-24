@@ -12,20 +12,22 @@ export class FlashcardService implements FlashcardServiceBase {
     async addWordFlashcard(
         userId: string,
         word: string,
-        meanings: string[]
+        meanings: string[],
+        reading: string
     ): Promise<void> {
         const existing = await FlashcardModel.findCardByUserAndKey(
             userId,
             word
         );
         if (existing) throw new Error("Card already exists");
-        await FlashcardModel.addCard(userId, word, meanings);
+        await FlashcardModel.addCard(userId, word, meanings, reading);
     }
 
     async addWordsBulkToFlashcard(
         userId: string,
         words: string[],
-        meanings: string[][]
+        meanings: string[][],
+        readings: string[]
     ): Promise<void> {
         const existingCards = await FlashcardModel.findCardsByUserAndKeys(
             userId,
@@ -33,9 +35,10 @@ export class FlashcardService implements FlashcardServiceBase {
         );
         const existingWordSet = new Set(existingCards.map((card) => card.key));
 
-        const { wordsToAdd, meaningsToAdd } = filterNewWords(
+        const { wordsToAdd, meaningsToAdd, readingsToAdd } = filterNewWords(
             words,
             meanings,
+            readings,
             existingWordSet
         );
 
@@ -43,7 +46,14 @@ export class FlashcardService implements FlashcardServiceBase {
             throw new Error("All cards already exist");
         }
 
-        await FlashcardModel.addCardsBulk(userId, wordsToAdd, meaningsToAdd);
+        await FlashcardModel.addCardsBulk(userId, wordsToAdd, meaningsToAdd, readingsToAdd);
+    }
+
+    async isExists(userId: string, word: string): Promise<boolean> {
+        return !!(await FlashcardModel.findCardByUserAndKey(
+            userId,
+            word
+        ))
     }
 
     async getWordsFromFlashcard(userId: string): Promise<ReviewCards[]> {

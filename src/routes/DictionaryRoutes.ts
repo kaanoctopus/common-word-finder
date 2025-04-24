@@ -3,7 +3,7 @@ import { DictionaryService } from "../services/DictionaryService";
 import { DictionaryController } from "../controllers/DictionaryController";
 import { authMiddleware } from "../middlewares/AuthMiddleware";
 import { handleValidation } from "../middlewares/HandleValidation";
-import { addMeaningsToListValidator } from "../validations/DictionaryValidation";
+import { addEntriesToListValidator } from "../validations/DictionaryValidation";
 import cors from "cors";
 
 const router = express.Router();
@@ -12,11 +12,11 @@ const dictionaryController = new DictionaryController(dictionaryService);
 
 router.use(cors());
 router.post(
-    "/meanings",
+    "/entries",
     authMiddleware,
-    addMeaningsToListValidator,
+    addEntriesToListValidator,
     handleValidation,
-    dictionaryController.addMeaningsToList
+    dictionaryController.addEntriesToList
 );
 
 export default router;

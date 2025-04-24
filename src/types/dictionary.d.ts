@@ -3,8 +3,9 @@ export interface WordFrequency {
     frequency: number;
 }
 
-export interface WordFrequencyWithMeanings extends WordFrequency {
+export interface WordFrequencyWithEntry extends WordFrequency {
     meanings: string[] | null;
+    reading: string | null
 }
 
 export interface jishoSense {

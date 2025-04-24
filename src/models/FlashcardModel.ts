@@ -4,11 +4,12 @@ import { ReviewCards } from "../types";
 export class FlashcardModel {
     private static prisma = new PrismaClient();
 
-    static async addCard(userId: string, key: string, meanings: string[]) {
+    static async addCard(userId: string, key: string, meanings: string[], reading: string) {
         return this.prisma.card.create({
             data: {
                 key,
                 meanings,
+                reading,
                 interval: 1,
                 nextReview: new Date(),
                 state: "learned",
@@ -20,11 +21,13 @@ export class FlashcardModel {
     static async addCardsBulk(
         userId: string,
         keys: string[],
-        meaningsList: string[][]
+        meaningsList: string[][],
+        readingsList: string[]
     ) {
         const cards = keys.map((key, i) => ({
             key,
             meanings: meaningsList[i],
+            reading: readingsList[i],
             interval: 1,
             nextReview: new Date(),
             state: "learned",
@@ -58,6 +61,7 @@ export class FlashcardModel {
                 key: true,
                 state: true,
                 meanings: true,
+                reading: true
             },
         });
     }

@@ -5,7 +5,7 @@ interface WordFrequency {
     frequency: number;
 }
 
-export const addMeaningsToListValidator = [
+export const addEntriesToListValidator = [
     body("*")
         .isArray()
         .withMessage("Input must be an array")

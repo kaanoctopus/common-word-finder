@@ -3,12 +3,17 @@ import path from "path";
 
 const DICTIONARY_PATH = path.join(
     __dirname,
-    "../../assets/jmdict/optimized-dictionary.json"
+    "../../assets/jmdict/optimized-dictionary-new.json"
 );
 
-type OptimizedDictionary = Record<string, string[] | null>;
+type DictionaryEntry = {
+    m: string[];
+    r: string;
+};
 
-const meaningCache = new Map<string, string[] | null>();
+type OptimizedDictionary = Record<string, DictionaryEntry>;
+
+const entryCache = new Map<string, DictionaryEntry | null>();
 
 /**
  * Loads the optimized dictionary into memory
@@ -18,7 +23,7 @@ const loadDictionary = (): OptimizedDictionary => {
     if (!fs.existsSync(DICTIONARY_PATH)) {
         throw new Error(
             `Optimized dictionary not found at ${DICTIONARY_PATH}. ` +
-                `Please run the dictionary optimization script first.`
+            `Please run the dictionary optimization script first.`
         );
     }
 
@@ -29,22 +34,22 @@ const loadDictionary = (): OptimizedDictionary => {
 let dictionary: OptimizedDictionary = loadDictionary();
 
 /**
- * Gets meanings for a word from the pre-processed dictionary
+ * Gets dictionary entry (meanings + reading) for a word
  * @param input The word to look up
- * @returns Array of meanings or null if not found
+ * @returns Entry or null if not found
  */
-export const getMeanings = (input: string): string[] | null => {
-    if (meaningCache.has(input)) {
-        return meaningCache.get(input)!;
+export const getEntry = (input: string): DictionaryEntry | null => {
+    if (entryCache.has(input)) {
+        return entryCache.get(input)!;
     }
 
     if (!dictionary) {
         dictionary = loadDictionary();
     }
 
-    const meanings = dictionary[input] ?? null;
+    const entry = dictionary[input] ?? null;
 
-    meaningCache.set(input, meanings);
+    entryCache.set(input, entry);
 
-    return meanings;
+    return entry;
 };

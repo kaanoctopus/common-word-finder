@@ -3,7 +3,7 @@ import axios from "axios";
 const jishoLink = "https://jisho.org/api/v1/search/words?keyword=";
 import { jishoEntry, jishoSense } from "../../types";
 
-export const getMeanings = async (word: string): Promise<string[]> => {
+export const getEntry = async (word: string): Promise<string[]> => {
     try {
         const response = await axios.get(`${jishoLink}${encodeURIComponent(word)}`, {
             headers: {

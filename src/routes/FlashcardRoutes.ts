@@ -41,6 +41,11 @@ router.get(
     flashcardController.getReviewWordsFromFlashcard
 );
 router.post(
+    "/check-if-exists",
+    authMiddleware,
+    flashcardController.isExists
+);
+router.post(
     "/review",
     authMiddleware,
     reviewFlashcardValidator,
