@@ -37,13 +37,11 @@ export class FlashcardModel {
         return this.prisma.card.createMany({ data: cards });
     }
 
-    static async getCardsForUser(userId: string): Promise<ReviewCards[]> {
+    static async getCardsForUser(userId: string): Promise<{key: string}[]> {
         return this.prisma.card.findMany({
             where: { userId },
             select: {
                 key: true,
-                state: true,
-                meanings: true,
             },
         });
     }

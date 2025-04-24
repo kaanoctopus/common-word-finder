@@ -11,4 +11,5 @@ export type ReviewCards = {
     key: string;
     meanings: string[];
     state: string;
+    reading: string;
 }
