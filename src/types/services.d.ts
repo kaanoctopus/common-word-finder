@@ -38,7 +38,7 @@ export abstract class FlashcardServiceBase {
         readings: string[]
     ): Promise<void>;
     abstract isExists(userId: string, word: string): Promise<boolean>;
-    abstract getWordsFromFlashcard(userId: string): Promise<ReviewCards[]>;
+    abstract getWordsFromFlashcard(userId: string): Promise<{key: string}[]>;
     abstract getReviewWordsFromFlashcard(
         userId: string
     ): Promise<ReviewCards[]>;

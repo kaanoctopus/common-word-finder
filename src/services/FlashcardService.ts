@@ -56,7 +56,7 @@ export class FlashcardService implements FlashcardServiceBase {
         ))
     }
 
-    async getWordsFromFlashcard(userId: string): Promise<ReviewCards[]> {
+    async getWordsFromFlashcard(userId: string): Promise<{key: string}[]> {
         return FlashcardModel.getCardsForUser(userId);
     }
 
