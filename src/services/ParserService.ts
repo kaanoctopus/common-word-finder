@@ -1,6 +1,6 @@
 import { Stack, wordWithFreq, ParserServiceBase } from "../types";
 import { parseJapaneseText, isValidWord } from "../utils/ParserUtils";
-import {AxiosError} from "axios";
+import { AxiosError } from "axios";
 
 export class ParserService implements ParserServiceBase {
     async extractWordsWithFrequency(text: string): Promise<wordWithFreq[]> {
@@ -18,7 +18,10 @@ export class ParserService implements ParserServiceBase {
                 const word = child?.value;
 
                 if (isValidWord(pos, word)) {
-                    wordFrequency.set(word!, (wordFrequency.get(word!) || 0) + 1);
+                    wordFrequency.set(
+                        word!,
+                        (wordFrequency.get(word!) || 0) + 1
+                    );
                 }
 
                 if (Array.isArray(node.children)) {
@@ -30,9 +33,11 @@ export class ParserService implements ParserServiceBase {
                 .sort(([, a], [, b]) => b - a)
                 .map(([word, frequency]) => ({ word, frequency }));
         } catch (err: unknown) {
-            const error = err as AxiosError
+            const error = err as AxiosError;
             throw new Error(
-                `Failed to extract words with frequency: ${error?.message || "Unknown error"}`
+                `Failed to extract words with frequency: ${
+                    error?.message || "Unknown error"
+                }`
             );
         }
     }

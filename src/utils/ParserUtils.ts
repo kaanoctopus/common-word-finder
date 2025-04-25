@@ -3,11 +3,12 @@ import { ParsedOutput } from "../types";
 import { EXCLUDED_POS } from "../config/constants";
 
 const japaneseParser = new JapaneseParser();
+const parserReady = japaneseParser.ready();
 
 export const parseJapaneseText = async (
     text: string
 ): Promise<ParsedOutput> => {
-    await japaneseParser.ready();
+    await parserReady;
     return japaneseParser.parse(text);
 };
 
