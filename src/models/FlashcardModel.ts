@@ -68,6 +68,13 @@ export class FlashcardModel {
         return this.prisma.card.findFirst({ where: { userId, key } });
     }
 
+    static async checkCardByUserAndKey(userId: string, key: string) {
+        return this.prisma.card.findFirst({ 
+            where: { userId, key },
+            select: { id: true }
+        });
+    }
+
     static async findCardsByUserAndKeys(userId: string, keys: string[]) {
         return this.prisma.card.findMany({
             where: {

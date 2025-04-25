@@ -15,7 +15,7 @@ export class FlashcardService implements FlashcardServiceBase {
         meanings: string[],
         reading: string
     ): Promise<void> {
-        const existing = await FlashcardModel.findCardByUserAndKey(
+        const existing = await FlashcardModel.checkCardByUserAndKey(
             userId,
             word
         );
@@ -50,7 +50,7 @@ export class FlashcardService implements FlashcardServiceBase {
     }
 
     async isExists(userId: string, word: string): Promise<boolean> {
-        return !!(await FlashcardModel.findCardByUserAndKey(
+        return !!(await FlashcardModel.checkCardByUserAndKey(
             userId,
             word
         ))
